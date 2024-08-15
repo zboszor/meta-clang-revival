@@ -19,7 +19,7 @@ TOOLCHAIN ?= "clang"
 
 **When using the `meta-clang-revival` layer, don't do this.**
 
-Besides this, this layer automatically allows using the Compute Runtime [meta-intel](https://git.yoctoproject.org/git/meta-intel).
+Besides this, this layer automatically allows building the Intel Compute Runtime with CLANG 15 in [meta-intel](https://git.yoctoproject.org/git/meta-intel).
 
 [meta-python-ai](https://github.com/zboszor/meta-python-ai) also relies on this layer for building the `python3-llvmlite` package.
 
