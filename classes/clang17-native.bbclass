@@ -7,7 +7,7 @@
 #
 # to the concerned recipe via a bbappend or directly to recipe file
 #
-DEPENDS:append:runtime-llvm = " clang17-native compiler-rt17-native libcxx17-initial-native"
+DEPENDS:append:runtime-llvm = " clang17-native compiler-rt17-native libcxx-native"
 # Use libcxx headers for native parts
 CXXFLAGS:append:runtime-llvm = " -stdlib=libc++"
 BUILD_CXXFLAGS:append:runtime-llvm = " -isysroot=${STAGING_DIR_NATIVE} -stdlib=libc++"
