@@ -116,7 +116,7 @@ def clang_base_deps(d):
         if not oe.utils.inherits(d, 'allarch') :
             ret = " ${MLPREFIX}clang17-cross-${TARGET_ARCH} virtual/libc "
             if (d.getVar('TC_CXX_RUNTIME').find('android') != -1):
-                ret += " libcxx17-initial"
+                ret += " libcxx"
                 return ret
             if (d.getVar('TC_CXX_RUNTIME').find('llvm') != -1):
                 ret += " compiler-rt17"
@@ -125,19 +125,19 @@ def clang_base_deps(d):
             else:
                 ret += " libgcc "
             if (d.getVar('TC_CXX_RUNTIME').find('llvm') != -1):
-                ret += " libcxx17-initial"
+                ret += " libcxx"
             elif (d.getVar('COMPILER_RT').find('--unwindlib=libunwind') != -1):
-                ret += " libcxx17-initial "
+                ret += " libcxx "
             elif (d.getVar('LIBCPLUSPLUS').find('-stdlib=libc++') != -1):
-                ret += " libcxx17-initial "
+                ret += " libcxx "
             else:
                 ret += " virtual/${TARGET_PREFIX}compilerlibs "
             return ret
     return ""
 
 BASE_DEFAULT_DEPS:append:class-target:toolchain-clang17:class-target = " ${@clang_base_deps(d)}"
-BASE_DEFAULT_DEPS:append:class-native:toolchain-clang17:runtime-llvm = " libcxx17-initial-native compiler-rt17-native"
-BASE_DEFAULT_DEPS:append:class-nativesdk:toolchain-clang17:runtime-llvm = " clang17-native nativesdk-libcxx17-initial nativesdk-compiler-rt17"
+BASE_DEFAULT_DEPS:append:class-native:toolchain-clang17:runtime-llvm = " libcxx-native compiler-rt17-native"
+BASE_DEFAULT_DEPS:append:class-nativesdk:toolchain-clang17:runtime-llvm = " clang17-native nativesdk-libcxx nativesdk-compiler-rt17"
 
 # do_populate_sysroot needs STRIP
 POPULATESYSROOTDEPS:toolchain-clang17:class-target = "${MLPREFIX}clang17-cross-${TARGET_ARCH}:do_populate_sysroot"
