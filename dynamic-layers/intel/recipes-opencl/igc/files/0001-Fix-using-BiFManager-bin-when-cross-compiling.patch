@@ -1,0 +1,96 @@
+From 3b4d1090f14d2e058f51a33235295ba5be6df25a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?=
+ <zboszor@gmail.com>
+Date: Sun, 10 Nov 2024 10:38:02 +0100
+Subject: [PATCH] Fix using BiFManager-bin when cross-compiling
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+Upstream-Status: Inappropriate [cross compiler specific]
+---
+ IGC/BiFModule/CMakeLists.txt                     | 4 ++--
+ IGC/VectorCompiler/lib/BiF/cmake/Functions.cmake | 2 +-
+ IGC/cmake/igc_llvm.cmake                         | 2 +-
+ external/SPIRV-Tools/CMakeLists.txt              | 4 ++--
+ visa/CMakeLists.txt                              | 7 +++++--
+ 5 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/IGC/BiFModule/CMakeLists.txt b/IGC/BiFModule/CMakeLists.txt
+index d59e345ce..56a9f18d3 100644
+--- a/IGC/BiFModule/CMakeLists.txt
++++ b/IGC/BiFModule/CMakeLists.txt
+@@ -644,8 +644,8 @@ set(IGC_BUILD__PROJ__BiFModuleCache_OCL       "${IGC_BUILD__PROJ__BiFModuleCache
+ 
+ add_custom_command(
+     OUTPUT "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.h" "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bifbc"
+-    COMMAND $<TARGET_FILE:BiFManager-bin> "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_32.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_64.bc" "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bifbc" "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.h"
+-    DEPENDS "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_32.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_64.bc"$<TARGET_FILE:BiFManager-bin>
++    COMMAND BiFManager-bin "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_32.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_64.bc" "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bifbc" "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.h"
++    DEPENDS "${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_32.bc" "${IGC_BUILD__BIF_DIR}/IGCsize_t_64.bc" $<TARGET_FILE:BiFManager-bin>
+     COMMENT "BiF: ${IGC_BUILD__BIF_DIR}/OCLBiFImpl.bc: Spliting output .bc."
+     COMMAND_EXPAND_LISTS
+ )
+diff --git a/IGC/VectorCompiler/lib/BiF/cmake/Functions.cmake b/IGC/VectorCompiler/lib/BiF/cmake/Functions.cmake
+index df3222e31..5b79d342e 100644
+--- a/IGC/VectorCompiler/lib/BiF/cmake/Functions.cmake
++++ b/IGC/VectorCompiler/lib/BiF/cmake/Functions.cmake
+@@ -109,7 +109,7 @@ function(vc_build_bif TARGET RES_FILE CMCL_SRC_PATH BIF_NAME PTR_BIT_SIZE)
+     COMMENT "vc_build_bif: Translating CMCL builtins:  ${BIF_CLANG_BC_NAME_FINAL} -> ${BIF_OPT_BC_NAME}"
+     COMMAND CMCLTranslatorTool -o ${BIF_CMCL_BC_NAME} ${BIF_CLANG_BC_NAME_FINAL}
+     COMMAND ${LLVM_OPT_EXE} ${IGC_BUILD__OPAQUE_POINTERS_DEFAULT_ARG_OPT} --O2 -o ${BIF_OPT_BC_NAME} ${BIF_CMCL_BC_NAME}
+-    DEPENDS CMCLTranslatorTool ${LLVM_OPT_EXE} ${BIF_CLANG_BC_PATH_FINAL}
++    DEPENDS CMCLTranslatorTool ${BIF_CLANG_BC_PATH_FINAL}
+     BYPRODUCTS ${BIF_OPT_BC_PATH}
+     SOURCES ${CMCL_SRC_PATH})
+   set(${RES_FILE} ${BIF_OPT_BC_NAME} PARENT_SCOPE)
+diff --git a/IGC/cmake/igc_llvm.cmake b/IGC/cmake/igc_llvm.cmake
+index ad799c450..478ecae6e 100644
+--- a/IGC/cmake/igc_llvm.cmake
++++ b/IGC/cmake/igc_llvm.cmake
+@@ -52,7 +52,7 @@ else()
+   set(LLVM_OPT_EXE "opt" CACHE STRING "")
+ 
+   set(LLVM_TABLEGEN_EXE "llvm-tblgen")
+-  if(CMAKE_CROSSCOMPILING)
++  if(TRUE)
+     if(DEFINED LLVM_TABLEGEN)
+       set(LLVM_TABLEGEN_EXE ${LLVM_TABLEGEN})
+     else()
+diff --git a/external/SPIRV-Tools/CMakeLists.txt b/external/SPIRV-Tools/CMakeLists.txt
+index a43b0a92d..b01717777 100644
+--- a/external/SPIRV-Tools/CMakeLists.txt
++++ b/external/SPIRV-Tools/CMakeLists.txt
+@@ -45,8 +45,8 @@ else() #By default use build from sources
+  message(STATUS "[SPIRV-Tools] : Building from source")
+  message(STATUS "[SPIRV-Tools] : Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+- set(SPIRV-Headers_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../SPIRV-Headers") # used in subdirectory
+- set(SPIRV-Tools_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../SPIRV-Tools")
++ set(SPIRV-Headers_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../SPIRV-Headers") # used in subdirectory
++ set(SPIRV-Tools_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../SPIRV-Tools")
+ 
+  set(SPIRV-Tools_OUTPUT_DIR "${IGC_OPTION__OUTPUT_DIR}/external/SPIRV-Tools/build")
+  set(IGC_BUILD__SPIRV-Headers_DIR "${SPIRV-Headers_SOURCE_DIR}")
+diff --git a/visa/CMakeLists.txt b/visa/CMakeLists.txt
+index e59782446..aafe42329 100644
+--- a/visa/CMakeLists.txt
++++ b/visa/CMakeLists.txt
+@@ -135,8 +135,11 @@ endif()
+ set(bison_output_file ${CMAKE_CURRENT_BINARY_DIR}/CISA.tab.cpp)
+ set(flex_output_file ${CMAKE_CURRENT_BINARY_DIR}/lex.CISA.cpp)
+ 
+-BISON_TARGET(CISAParser CISA.y ${bison_output_file} COMPILE_FLAGS "-vt -p CISA")
+-FLEX_TARGET(CISAScanner CISA.l ${flex_output_file} COMPILE_FLAGS "-PCISA ${WIN_FLEX_FLAG}")
++if(BISON_VERSION VERSION_GREATER_EQUAL "3.7.0")
++    set(BISON_EXTRA_FLAGS " --file-prefix-map=$ENV{B}=/igc/ ")
++endif()
++BISON_TARGET(CISAParser CISA.y ${bison_output_file} COMPILE_FLAGS "-l -vt -p CISA ${BISON_EXTRA_FLAGS} ")
++FLEX_TARGET(CISAScanner CISA.l ${flex_output_file} COMPILE_FLAGS "-PCISA -L ${WIN_FLEX_FLAG} ")
+ ADD_FLEX_BISON_DEPENDENCY(CISAScanner CISAParser)
+ set(CISAScanner_dependencies)
+ 
+-- 
+2.47.0
+
