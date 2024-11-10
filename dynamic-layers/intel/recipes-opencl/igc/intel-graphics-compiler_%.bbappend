@@ -10,3 +10,4 @@ SRC_URI:prepend = "git://github.com/intel/intel-graphics-compiler.git;protocol=h
 SRCREV_igc = "41b696b1f1947497654195c59a6dce803f52d9ed"
 SRCREV_vc = "8d2e809368443305155370573f3c6db8279ed87d"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+DEPENDS += "python3-pyyaml-native"
