@@ -17,4 +17,4 @@ EXTRA_OECMAKE += " \
 	-DNEO_FORCE_ENABLE_PLATFORMS_FOR_OCLOC=TRUE \
 "
 
-PACKAGECONFIG = "levelzero"
+PACKAGECONFIG:class-target:x86-64 = "levelzero"
