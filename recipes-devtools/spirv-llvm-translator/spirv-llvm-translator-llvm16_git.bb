@@ -4,8 +4,8 @@ LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=47e311aa9caedd1b3abf098bd7814d1d"
 BRANCH = "llvm_release_160"
 SRC_URI = "git://github.com/KhronosGroup/SPIRV-LLVM-Translator;protocol=https;branch=${BRANCH}"
 
-PV = "16.0.10.git"
-SRCREV = "36b47eddc04dad64b8dd939018bde361ce74723e"
+PV = "16.0.8"
+SRCREV = "0fec1b86dac6f50e3f8359f62c9e26a621be14a4"
 
 S = "${WORKDIR}/git"
 
