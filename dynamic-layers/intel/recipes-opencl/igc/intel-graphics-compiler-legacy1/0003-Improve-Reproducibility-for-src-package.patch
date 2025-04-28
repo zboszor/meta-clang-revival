@@ -10,14 +10,14 @@ before adding the flags.
 Upstream-Status: Inappropriate [applying --file-prefix-map in such way does not work for upstream]
 Signed-off-by: Lee Chee Yang <chee.yang.lee@intel.com>
 ---
- visa/CMakeLists.txt | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ visa/CMakeLists.txt      | 7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/visa/CMakeLists.txt b/visa/CMakeLists.txt
-index 1b01b3389..8d608163d 100644
+index e59782446..aafe42329 100644
 --- a/visa/CMakeLists.txt
 +++ b/visa/CMakeLists.txt
-@@ -133,8 +133,11 @@ endif()
+@@ -135,8 +135,11 @@ endif()
  set(bison_output_file ${CMAKE_CURRENT_BINARY_DIR}/CISA.tab.cpp)
  set(flex_output_file ${CMAKE_CURRENT_BINARY_DIR}/lex.CISA.cpp)
  
@@ -31,3 +31,6 @@ index 1b01b3389..8d608163d 100644
  ADD_FLEX_BISON_DEPENDENCY(CISAScanner CISAParser)
  set(CISAScanner_dependencies)
  
+-- 
+2.47.0
+
