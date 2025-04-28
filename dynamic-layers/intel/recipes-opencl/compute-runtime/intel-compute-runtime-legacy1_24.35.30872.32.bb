@@ -8,19 +8,19 @@ LICENSE = "MIT & Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=eca6ec6997e18db166db7109cdbe611c \
                     file://third_party/opencl_headers/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-SRC_URI = "git://github.com/intel/compute-runtime.git;protocol=https;branch=releases/24.26 \
+SRC_URI = "git://github.com/intel/compute-runtime.git;protocol=https;branch=releases/24.35 \
            file://0001-intel-compute-runtime-fix-build-with-gcc13.patch \
            file://0002-Build-not-able-to-locate-cpp_generation_tool.patch \
            file://0003-external-ocloc.patch \
            "
 
-SRCREV = "e16f47e375e4324dae07aadbfe953002a1c45195"
+SRCREV = "0361ca456469bed559af08e4f731c5b8754c76f1"
 
 S = "${WORKDIR}/git"
 
-DEPENDS += " intel-graphics-compiler gmmlib libva qemu-native"
+DEPENDS += " intel-graphics-compiler-legacy1 gmmlib libva-initial qemu-native"
 
-RDEPENDS:${PN} += " intel-graphics-compiler gmmlib"
+RDEPENDS:${PN} += " intel-graphics-compiler-legacy1 gmmlib"
 
 inherit cmake pkgconfig qemu
 
@@ -34,6 +34,9 @@ EXTRA_OECMAKE = " \
                  -DCCACHE_ALLOWED=FALSE \
                  -DNEO_DISABLE_LD_LLD=ON \
                  -DNEO_DISABLE_LD_GOLD=ON \
+                 -DNEO_LEGACY_PLATFORMS_SUPPORT=ON \
+                 -DNEO_CURRENT_PLATFORMS_SUPPORT=OFF \
+                 -DNEO_FORCE_ENABLE_PLATFORMS_FOR_OCLOC=TRUE \
                  "
 
 EXTRA_OECMAKE:append:class-target = " \
@@ -42,6 +45,7 @@ EXTRA_OECMAKE:append:class-target = " \
                                      "
 
 PACKAGECONFIG ??= ""
+PACKAGECONFIG:class-target:x86-64 = "levelzero"
 PACKAGECONFIG[levelzero] = "-DBUILD_WITH_L0=ON, -DBUILD_WITH_L0=OFF, level-zero"
 
 do_configure:prepend:class-target () {
