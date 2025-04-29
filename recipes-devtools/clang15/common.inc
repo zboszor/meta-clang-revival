@@ -45,6 +45,7 @@ SRC_URI = "\
     file://0035-cmake-Enable-64bit-off_t-on-32bit-glibc-systems.patch \
     file://0036-compiler-rt-Undef-_TIME_BITS-along-with-_FILE_OFFSET.patch \
     file://0036-llvm-Add-libunwind.pc.in-and-llvm-config-scripts.patch \
+    file://0001-Fix-building-lldb-with-Python-3.13.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
