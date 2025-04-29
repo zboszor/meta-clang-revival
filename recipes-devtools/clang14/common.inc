@@ -48,6 +48,7 @@ SRC_URI = "\
     file://0038-lldb-Get-rid-of-__STDC_LIMIT_MACROS-and-__STDC_CONST.patch \
     file://0039-lldb-Fix-error-non-const-lvalue.-caused-by-SWIG-4.1..patch \
     file://0034-llvm-Add-libunwind.pc.in-and-llvm-config-scripts.patch \
+    file://0001-Fix-building-lldb-with-Python-3.13.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
