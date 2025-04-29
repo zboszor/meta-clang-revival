@@ -59,8 +59,8 @@ EOF
 }
 
 FILES:${PN} += " \
-                 ${libdir}/intel-opencl/libigdrcl.so \
-                 ${libdir}/libocloc.so \
+                 ${libdir}/intel-opencl/libigdrcl_legacy1.so \
+                 ${libdir}/libocloc_legacy1.so \
                  "
 
 FILES:${PN}-dev = "${includedir}"
