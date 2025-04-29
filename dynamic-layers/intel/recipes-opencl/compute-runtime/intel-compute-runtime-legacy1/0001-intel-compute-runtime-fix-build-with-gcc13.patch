@@ -10,10 +10,10 @@ Signed-off-by: Anuj Mittal <anuj.mittal@intel.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5e43b4ad76..619243913b 100644
+index b5b5ce0b66..63fedad2dd 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -811,7 +811,7 @@ if(NOT MSVC)
+@@ -851,7 +851,7 @@ if(NOT MSVC)
        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-noexcept-type") # Added for gtest
      endif()
    endif()
@@ -23,5 +23,5 @@ index 5e43b4ad76..619243913b 100644
    if(USE_SANITIZE_UB)
      check_cxx_compiler_flag(-fsanitize=undefined COMPILER_SUPPORTS_UNDEFINED_BEHAVIOR_SANITIZER)
 -- 
-2.34.1
+2.47.0
 
