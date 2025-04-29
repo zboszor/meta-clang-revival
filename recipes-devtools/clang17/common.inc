@@ -44,6 +44,7 @@ SRC_URI = "\
     file://0033-compiler-rt-Undef-_TIME_BITS-along-with-_FILE_OFFSET.patch \
     file://0034-ToolChains-Gnu.cpp-ARMLibDirs-search-also-in-lib32.patch \
     file://0035-libcxx-Implement-LWG3545-std-pointer_traits-should-be-.patch \
+    file://0001-Fix-building-lldb-with-Python-3.13.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
