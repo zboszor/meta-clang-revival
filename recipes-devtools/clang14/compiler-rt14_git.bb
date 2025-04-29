@@ -103,7 +103,7 @@ INSANE_SKIP:${PN}-dbg = "libdir"
 INSANE_SKIP:${PN}-staticdev += "buildpaths"
 
 #PROVIDES:append:class-target = "\
-#        virtual/${TARGET_PREFIX}compilerlibs \
+#        virtual/${MLPREFIX}compilerlibs \
 #        libgcc \
 #        libgcc-initial \
 #        libgcc-dev \

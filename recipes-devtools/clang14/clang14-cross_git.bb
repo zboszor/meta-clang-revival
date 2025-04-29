@@ -11,7 +11,7 @@ PN = "clang14-cross-${TARGET_ARCH}"
 require clang.inc
 require common-source.inc
 inherit cross
-DEPENDS += "clang14-native virtual/${TARGET_PREFIX}binutils"
+DEPENDS += "clang14-native virtual/cross-binutils"
 
 do_install() {
         install -d ${D}${bindir}
