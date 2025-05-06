@@ -29,6 +29,10 @@ EXTRA_OECMAKE = "\
 "
 
 DEBIAN_NOAUTONAME:${PN} = "1"
+DEBIAN_NOAUTONAME:${PN}-bin = "1"
+DEBIAN_NOAUTONAME:${PN}-dbg = "1"
+DEBIAN_NOAUTONAME:${PN}-dev = "1"
+DEBIAN_NOAUTONAME:${PN}-src = "1"
 
 PACKAGES =+ "${PN}-bin"
 FILES:${PN}-bin = "${bindir}/*"
