@@ -28,8 +28,10 @@ EXTRA_OECMAKE = "\
         -DCCACHE_ALLOWED=FALSE \
 "
 
-PACKAGES =+ "spirv-llvm15-translator-bin"
-FILES:spirv-llvm15-translator-bin = "${bindir}/*"
+DEBIAN_NOAUTONAME:${PN} = "1"
+
+PACKAGES =+ "${PN}-bin"
+FILES:${PN}-bin = "${bindir}/*"
 
 BBCLASSEXTEND = "native nativesdk"
 
