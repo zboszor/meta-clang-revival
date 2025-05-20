@@ -20,11 +20,6 @@ LLDBMD5SUM = "2e0d44968471fcde980034dbb826bea9"
 
 LLVM_LIBDIR_SUFFIX = "${@d.getVar('baselib').replace('lib', '')}"
 
-# Counteract the instructions given in README.md
-PREFERRED_PROVIDER_llvm = "clang17"
-PREFERRED_PROVIDER_llvm-native = "clang17-native"
-PREFERRED_PROVIDER_nativesdk-llvm = "nativesdk-clang17"
-
 # Don't include these recipes in "bitbake world"
 # as clang17 conflicts with clang.
 EXCLUDE_FROM_WORLD = "1"
