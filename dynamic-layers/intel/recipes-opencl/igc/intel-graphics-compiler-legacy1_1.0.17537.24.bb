@@ -67,6 +67,10 @@ EOF
 
 UPSTREAM_CHECK_GITTAGREGEX = "^igc-(?P<pver>(?!19\..*)\d+(\.\d+)+)$"
 
+PACKAGES =+ "${PN}-bin"
+
+FILES:${PN}-bin = "${bindir}/*"
+
 FILES:${PN} += " \
                  ${libdir}/igc/NOTICES.txt \
                  "
