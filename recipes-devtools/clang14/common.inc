@@ -48,6 +48,12 @@ SRC_URI = "\
     file://0038-lldb-Get-rid-of-__STDC_LIMIT_MACROS-and-__STDC_CONST.patch \
     file://0039-lldb-Fix-error-non-const-lvalue.-caused-by-SWIG-4.1..patch \
     file://0034-llvm-Add-libunwind.pc.in-and-llvm-config-scripts.patch \
+    file://0001-Fix-building-lldb-with-Python-3.13.patch \
+    file://0001-ADT-Add-cstdint-to-SmallVector-101761.patch \
+    file://0001-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch \
+    file://0001-Add-missing-include-to-X86MCTargetDesc.h-123320.patch \
+    file://0001-openmp-libomptarget-include-Debug.h-Add-missing-incl.patch \
+    file://0001-compiler-rt-lib-orc-error.h-Add-missing-include.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
