@@ -45,6 +45,12 @@ SRC_URI = "\
     file://0035-cmake-Enable-64bit-off_t-on-32bit-glibc-systems.patch \
     file://0036-compiler-rt-Undef-_TIME_BITS-along-with-_FILE_OFFSET.patch \
     file://0036-llvm-Add-libunwind.pc.in-and-llvm-config-scripts.patch \
+    file://0001-Fix-building-lldb-with-Python-3.13.patch \
+    file://0001-ADT-Add-cstdint-to-SmallVector-101761.patch \
+    file://0001-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch \
+    file://0001-Add-missing-include-to-X86MCTargetDesc.h-123320.patch \
+    file://0001-openmp-libomptarget-include-Debug.h-Add-missing-incl.patch \
+    file://0001-compiler-rt-lib-orc-error.h-Add-missing-include.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
