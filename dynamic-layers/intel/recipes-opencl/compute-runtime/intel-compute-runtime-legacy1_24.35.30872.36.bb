@@ -14,7 +14,7 @@ SRC_URI = "git://github.com/intel/compute-runtime.git;protocol=https;branch=rele
            file://0003-external-ocloc.patch \
            "
 
-SRCREV = "0361ca456469bed559af08e4f731c5b8754c76f1"
+SRCREV = "2cacae673fabf74bcd77ed8bece2ac3df9781f91"
 
 S = "${WORKDIR}/git"
 
