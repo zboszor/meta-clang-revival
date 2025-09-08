@@ -20,7 +20,7 @@ LDFLAGS:remove:class-nativesdk = "-fuse-ld=lld"
 LDFLAGS:append:class-target:riscv32 = " -Wl,--no-as-needed -latomic -Wl,--as-needed"
 LDFLAGS:append:class-target:mips = " -Wl,--no-as-needed -latomic -Wl,--as-needed"
 
-inherit cmake cmake-native pkgconfig python3native python3targetconfig
+inherit cmake pkgconfig python3native python3targetconfig
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
