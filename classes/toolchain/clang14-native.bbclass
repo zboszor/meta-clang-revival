@@ -1,3 +1,3 @@
-CLANGMAJORVERSION = "17"
+CLANGMAJORVERSION = "14"
 
 require clang-native.inc
