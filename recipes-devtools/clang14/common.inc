@@ -54,11 +54,12 @@ SRC_URI = "\
     file://0001-Add-missing-include-to-X86MCTargetDesc.h-123320.patch \
     file://0001-openmp-libomptarget-include-Debug.h-Add-missing-incl.patch \
     file://0001-compiler-rt-lib-orc-error.h-Add-missing-include.patch \
+    file://0001-libunwind-Work-with-Python-3.12.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
 
-S = "${TMPDIR}/work-shared/llvm-project-source-${PV}-${PR}/git"
+S = "${TMPDIR}/work-shared/llvm-project-source-${PV}-${PR}/sources/llvm-project-source-${PV}-${PV}"
 B ?= "${WORKDIR}/llvm-project-source-${PV}/build.${HOST_SYS}.${TARGET_SYS}"
 
 # We need to ensure that for the shared work directory, the do_patch signatures match

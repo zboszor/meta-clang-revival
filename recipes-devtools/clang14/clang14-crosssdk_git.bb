@@ -8,7 +8,7 @@ SECTION = "devel"
 
 PN = "clang14-crosssdk-${TARGET_ARCH}"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 inherit crosssdk
 DEPENDS += "clang14-native nativesdk-clang14-glue virtual/nativesdk-cross-binutils virtual/nativesdk-libc"
