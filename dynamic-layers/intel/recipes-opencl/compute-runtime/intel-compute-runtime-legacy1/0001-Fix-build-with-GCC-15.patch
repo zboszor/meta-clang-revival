@@ -1,0 +1,149 @@
+From 54a267135e6689330af13f7d86b93cd1a3677ebc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?=
+ <zboszor@gmail.com>
+Date: Mon, 8 Sep 2025 10:59:04 +0200
+Subject: [PATCH] Fix build with GCC 15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Added missing #include <cstdint> lines.
+
+Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+Upstream-Status: Inappropriate [Yocto specific]
+---
+ shared/generate_cpp_array/source/generate_cpp_array.cpp | 1 +
+ shared/offline_compiler/source/decoder/iga_wrapper.h    | 1 +
+ shared/offline_compiler/source/ocloc_arg_helper.h       | 1 +
+ shared/source/debugger/debugger.h                       | 1 +
+ shared/source/gmm_helper/gmm_helper.h                   | 1 +
+ shared/source/os_interface/device_factory.h             | 1 +
+ shared/source/os_interface/os_memory.h                  | 1 +
+ shared/source/os_interface/os_time.h                    | 1 +
+ shared/source/program/program_info.h                    | 1 +
+ shared/source/utilities/software_tags.h                 | 1 +
+ 10 files changed, 10 insertions(+)
+
+diff --git a/shared/generate_cpp_array/source/generate_cpp_array.cpp b/shared/generate_cpp_array/source/generate_cpp_array.cpp
+index a1dcde7d26..eac40fd842 100644
+--- a/shared/generate_cpp_array/source/generate_cpp_array.cpp
++++ b/shared/generate_cpp_array/source/generate_cpp_array.cpp
+@@ -5,6 +5,7 @@
+  *
+  */
+ 
++#include <cstdint>
+ #include <fstream>
+ #include <iomanip>
+ #include <iostream>
+diff --git a/shared/offline_compiler/source/decoder/iga_wrapper.h b/shared/offline_compiler/source/decoder/iga_wrapper.h
+index 89bcd89021..8dcc6c03ca 100644
+--- a/shared/offline_compiler/source/decoder/iga_wrapper.h
++++ b/shared/offline_compiler/source/decoder/iga_wrapper.h
+@@ -9,6 +9,7 @@
+ 
+ #include "igfxfmid.h"
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ 
+diff --git a/shared/offline_compiler/source/ocloc_arg_helper.h b/shared/offline_compiler/source/ocloc_arg_helper.h
+index 3aca7258b0..8ae084d7ec 100644
+--- a/shared/offline_compiler/source/ocloc_arg_helper.h
++++ b/shared/offline_compiler/source/ocloc_arg_helper.h
+@@ -13,6 +13,7 @@
+ #include <algorithm>
+ #include <fstream>
+ #include <map>
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+diff --git a/shared/source/debugger/debugger.h b/shared/source/debugger/debugger.h
+index cfc1865808..3aea06bf8c 100644
+--- a/shared/source/debugger/debugger.h
++++ b/shared/source/debugger/debugger.h
+@@ -6,6 +6,7 @@
+  */
+ 
+ #pragma once
++#include <cstdint>
+ #include <memory>
+ namespace NEO {
+ struct HardwareInfo;
+diff --git a/shared/source/gmm_helper/gmm_helper.h b/shared/source/gmm_helper/gmm_helper.h
+index e534fab6c2..107d28058b 100644
+--- a/shared/source/gmm_helper/gmm_helper.h
++++ b/shared/source/gmm_helper/gmm_helper.h
+@@ -6,6 +6,7 @@
+  */
+ 
+ #pragma once
++#include <cstdint>
+ #include <memory>
+ 
+ namespace NEO {
+diff --git a/shared/source/os_interface/device_factory.h b/shared/source/os_interface/device_factory.h
+index 75dd491704..bdcdb47807 100644
+--- a/shared/source/os_interface/device_factory.h
++++ b/shared/source/os_interface/device_factory.h
+@@ -6,6 +6,7 @@
+  */
+ 
+ #pragma once
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+diff --git a/shared/source/os_interface/os_memory.h b/shared/source/os_interface/os_memory.h
+index 7c521b004d..0597c8714c 100644
+--- a/shared/source/os_interface/os_memory.h
++++ b/shared/source/os_interface/os_memory.h
+@@ -6,6 +6,7 @@
+  */
+ 
+ #pragma once
++#include <cstdint>
+ #include <memory>
+ #include <vector>
+ 
+diff --git a/shared/source/os_interface/os_time.h b/shared/source/os_interface/os_time.h
+index 762ce5f40c..8c1c3397de 100644
+--- a/shared/source/os_interface/os_time.h
++++ b/shared/source/os_interface/os_time.h
+@@ -6,6 +6,7 @@
+  */
+ 
+ #pragma once
++#include <cstdint>
+ #include <memory>
+ #include <optional>
+ 
+diff --git a/shared/source/program/program_info.h b/shared/source/program/program_info.h
+index afc906a79d..b273eb1ad4 100644
+--- a/shared/source/program/program_info.h
++++ b/shared/source/program/program_info.h
+@@ -9,6 +9,7 @@
+ #include "shared/source/utilities/arrayref.h"
+ 
+ #include <cstddef>
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <unordered_map>
+diff --git a/shared/source/utilities/software_tags.h b/shared/source/utilities/software_tags.h
+index 5b16e0c2de..35d01fdbf8 100644
+--- a/shared/source/utilities/software_tags.h
++++ b/shared/source/utilities/software_tags.h
+@@ -8,6 +8,7 @@
+ #pragma once
+ #include "shared/source/helpers/string.h"
+ 
++#include <cstdint>
+ #include <string>
+ 
+ namespace NEO {
+-- 
+2.51.0
+

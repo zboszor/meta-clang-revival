@@ -12,11 +12,10 @@ SRC_URI = "git://github.com/intel/compute-runtime.git;protocol=https;branch=rele
            file://0001-intel-compute-runtime-fix-build-with-gcc13.patch \
            file://0002-Build-not-able-to-locate-cpp_generation_tool.patch \
            file://0003-external-ocloc.patch \
+           file://0001-Fix-build-with-GCC-15.patch \
            "
 
 SRCREV = "2cacae673fabf74bcd77ed8bece2ac3df9781f91"
-
-S = "${WORKDIR}/git"
 
 DEPENDS += " intel-graphics-compiler-legacy1 gmmlib libva-initial qemu-native"
 
