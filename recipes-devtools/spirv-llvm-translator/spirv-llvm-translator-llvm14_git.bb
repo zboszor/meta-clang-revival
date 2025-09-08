@@ -7,8 +7,6 @@ SRC_URI = "git://github.com/KhronosGroup/SPIRV-LLVM-Translator;protocol=https;br
 PV = "14.0.10.git"
 SRCREV = "8914244bc92802786c29852eba2baf66c7028cb5"
 
-S = "${WORKDIR}/git"
-
 DEPENDS = "spirv-headers spirv-tools spirv-tools-native clang14"
 
 inherit cmake pkgconfig python3native
