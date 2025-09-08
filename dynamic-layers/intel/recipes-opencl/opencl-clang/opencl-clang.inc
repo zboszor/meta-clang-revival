@@ -9,15 +9,17 @@ SRC_URI = "git://github.com/intel/opencl-clang.git;branch=${BRANCH};protocol=htt
            file://0002-Request-native-clang-only-when-cross-compiling-464.patch \
            file://0001-cl_headers-CMakeLists.txt-use-clang-from-native-sysr.patch \
            "
-S = "${WORKDIR}/git"
 
 inherit cmake
 
 COMPATIBLE_HOST = '(x86_64).*-linux'
 COMPATIBLE_HOST:libc-musl = "null"
 
+LLVMTBLGENVER ?= ""
+
 EXTRA_OECMAKE += "\
-                  -DLLVM_TABLEGEN_EXE=${STAGING_BINDIR_NATIVE}/llvm-tblgen \
+                  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+                  -DLLVM_TABLEGEN_EXE=${STAGING_BINDIR_NATIVE}/llvm-tblgen${LLVMTBLGENVER} \
                   -DCMAKE_SKIP_RPATH=TRUE \
                   "
 
