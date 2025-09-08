@@ -2,7 +2,7 @@ DESCRIPTION = "LLVM based OpenCL runtime support library"
 HOMEPAGE = "http://libclc.llvm.org/"
 SECTION = "libs"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 TOOLCHAIN = "clang15"

@@ -5,7 +5,7 @@ DESCRIPTION = "LLVM based C/C++ compiler Runtime"
 HOMEPAGE = "https://openmp.llvm.org/"
 SECTION = "libs"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 TOOLCHAIN = "clang15"

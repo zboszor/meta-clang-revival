@@ -5,7 +5,7 @@ DESCRIPTION = "LLVM based C/C++ compiler Runtime"
 HOMEPAGE = "http://compiler-rt.llvm.org/"
 SECTION = "base"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 inherit cmake pkgconfig python3native
@@ -53,8 +53,8 @@ EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 "
 
 EXTRA_OECMAKE:append:class-nativesdk = "\
-               -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen \
-               -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen \
+               -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
+               -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
 "
 
 EXTRA_OECMAKE:append:class-target = "\

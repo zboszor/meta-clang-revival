@@ -5,7 +5,7 @@ DESCRIPTION = "LLVM based C/C++ compiler"
 HOMEPAGE = "http://clang.llvm.org/"
 SECTION = "devel"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 INHIBIT_DEFAULT_DEPS = "1"
@@ -20,7 +20,7 @@ LDFLAGS:remove:class-nativesdk = "-fuse-ld=lld"
 LDFLAGS:append:class-target:riscv32 = " -Wl,--no-as-needed -latomic -Wl,--as-needed"
 LDFLAGS:append:class-target:mips = " -Wl,--no-as-needed -latomic -Wl,--as-needed"
 
-inherit cmake cmake-native pkgconfig python3native python3targetconfig
+inherit cmake pkgconfig python3native python3targetconfig
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
@@ -165,9 +165,9 @@ EXTRA_OECMAKE:append:class-nativesdk = "\
                   -DCMAKE_STRIP=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-strip \
                   -DLLVM_USE_HOST_TOOLS=OFF \
                   -DLLVM_CONFIG_PATH=${STAGING_BINDIR_NATIVE}/llvm-config \
-                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen \
-                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen \
-                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen \
+                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
+                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen${PV} \
+                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
                   -DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${STAGING_BINDIR_NATIVE}/clang-tidy-confusable-chars-gen \
                   -DCLANG_PSEUDO_GEN=${STAGING_BINDIR_NATIVE}/clang-pseudo-gen \
                   -DPYTHON_LIBRARY=${STAGING_LIBDIR}/lib${PYTHON_DIR}${PYTHON_ABI}.so \
@@ -181,9 +181,9 @@ EXTRA_OECMAKE:append:class-target = "\
                   -DCMAKE_CROSSCOMPILING:BOOL=ON \
                   -DLLVM_USE_HOST_TOOLS=OFF \
                   -DLLVM_CONFIG_PATH=${STAGING_BINDIR_NATIVE}/llvm-config \
-                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen \
-                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen \
-                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen \
+                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
+                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen${PV} \
+                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
                   -DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${STAGING_BINDIR_NATIVE}/clang-tidy-confusable-chars-gen \
                   -DCLANG_PSEUDO_GEN=${STAGING_BINDIR_NATIVE}/clang-pseudo-gen \
                   -DCMAKE_RANLIB=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-ranlib \
@@ -249,29 +249,27 @@ endif()\n" ${D}${libdir}/cmake/llvm/LLVMExports-release.cmake
 }
 
 do_install:append:class-native () {
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-pseudo-gen ${D}${bindir}/clang-pseudo-gen
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tidy-confusable-chars-gen ${D}${bindir}/clang-tidy-confusable-chars-gen
     for f in `find ${D}${bindir} -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
         echo "stripped $f"
     done
-    ln -sf clang-tblgen ${D}${bindir}/clang-tblgen${PV}
-    ln -sf llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
+    mv ${D}${bindir}/llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
     ln -sf llvm-config ${D}${bindir}/llvm-config${PV}
 }
 
 do_install:append:class-nativesdk () {
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-pseudo-gen ${D}${bindir}/clang-pseudo-gen
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tidy-confusable-chars-gen ${D}${bindir}/clang-tidy-confusable-chars-gen
     for f in `find ${D}${bindir} -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
     done
-    ln -sf clang-tblgen ${D}${bindir}/clang-tblgen${PV}
-    ln -sf llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
+    mv ${D}${bindir}/llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
     ln -sf llvm-config ${D}${bindir}/llvm-config${PV}
     rm -rf ${D}${datadir}/llvm/cmake
     rm -rf ${D}${datadir}/llvm
