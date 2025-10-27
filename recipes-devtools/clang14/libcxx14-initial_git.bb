@@ -95,7 +95,7 @@ CXXFLAGS:append:armv5 = " -mfpu=vfp2"
 
 ALLOW_EMPTY:${PN} = "1"
 
-PROVIDES:append:runtime-llvm = " libunwind15"
+PROVIDES:append:runtime-llvm = " libunwind14"
 
 do_install:append() {
     if ${@bb.utils.contains("TC_CXX_RUNTIME", "llvm", "true", "false", d)}
