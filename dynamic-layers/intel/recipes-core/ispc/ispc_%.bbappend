@@ -1,4 +1,4 @@
 DEPENDS:remove = "clang-native"
-DEPENDS:append = " clang14-native"
+DEPENDS:append = " clang15-native"
 DEPENDS:remove:class-target = "clang"
-DEPENDS:append:class-target = " clang14"
+DEPENDS:append:class-target = " clang15"
