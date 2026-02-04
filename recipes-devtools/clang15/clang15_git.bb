@@ -348,7 +348,7 @@ FILES:${PN} += "\
   ${libdir}/LLVMHello.so \
   ${libdir}/LLVMgold.so \
   ${libdir}/*Plugin.so \
-  ${libdir}/${BPN} \
+  ${libdir}/clang \
   ${nonarch_libdir}/clang/*/include/ \
   ${datadir}/scan-* \
   ${nonarch_libdir}/libscanbuild \
@@ -387,14 +387,14 @@ FILES:${PN}-dev += "\
   ${datadir}/llvm/cmake \
   ${libdir}/cmake \
   ${nonarch_libdir}/libear \
-  ${nonarch_libdir}/${BPN}/*.la \
+  ${nonarch_libdir}/clang/*.la \
 "
 
-FILES:${PN}-staticdev += "${nonarch_libdir}/${BPN}/*.a"
+FILES:${PN}-staticdev += "${nonarch_libdir}/clang/*.a"
 
-FILES:${PN}-staticdev:remove = "${libdir}/${BPN}/*.a"
-FILES:${PN}-dev:remove = "${libdir}/${BPN}/*.la"
-FILES:${PN}:remove = "${libdir}/${BPN}/*"
+FILES:${PN}-staticdev:remove = "${libdir}/clang/*.a"
+FILES:${PN}-dev:remove = "${libdir}/clang/*.la"
+FILES:${PN}:remove = "${libdir}/clang/*"
 
 
 INSANE_SKIP:${PN} += "already-stripped"

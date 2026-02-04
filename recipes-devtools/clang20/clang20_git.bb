@@ -324,7 +324,7 @@ FILES:${PN} += "\
   ${libdir}/BugpointPasses.so \
   ${libdir}/LLVMHello.so \
   ${libdir}/*Plugin.so \
-  ${libdir}/${BPN} \
+  ${libdir}/clang \
   ${nonarch_libdir}/clang/*/include/ \
 "
 
@@ -342,15 +342,15 @@ FILES:${PN}-dev += "\
   ${datadir}/llvm/cmake \
   ${libdir}/cmake \
   ${nonarch_libdir}/libear \
-  ${nonarch_libdir}/${BPN}/*.la \
+  ${nonarch_libdir}/clang/*.la \
 "
 FILES:${PN}-doc += "${datadir}/clang-doc"
 
-FILES:${PN}-staticdev += "${nonarch_libdir}/${BPN}/*.a"
+FILES:${PN}-staticdev += "${nonarch_libdir}/clang/*.a"
 
-FILES:${PN}-staticdev:remove = "${libdir}/${BPN}/*.a"
-FILES:${PN}-dev:remove = "${libdir}/${BPN}/*.la"
-FILES:${PN}:remove = "${libdir}/${BPN}/*"
+FILES:${PN}-staticdev:remove = "${libdir}/clang/*.a"
+FILES:${PN}-dev:remove = "${libdir}/clang/*.la"
+FILES:${PN}:remove = "${libdir}/clang/*"
 
 INSANE_SKIP:${PN} += "already-stripped"
 #INSANE_SKIP:${PN}-dev += "dev-elf"
