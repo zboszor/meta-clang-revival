@@ -1,6 +1,6 @@
 require opencl-clang.inc
 
-SRCREV = "58242977b4092cf5eb94a10dd144691c12c87001"
+SRCREV = "2ce8d3ffbdc10bcbf9f3c42b80ef69babca98522"
 
 BRANCH = "ocl-open-150"
 
