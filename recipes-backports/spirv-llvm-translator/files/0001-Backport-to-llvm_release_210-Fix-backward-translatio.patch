@@ -1,0 +1,84 @@
+From f57c44c79895f35d7d02a2ee716148c48a73ec3f Mon Sep 17 00:00:00 2001
+From: "github-actions[bot]"
+ <41898282+github-actions[bot]@users.noreply.github.com>
+Date: Tue, 3 Feb 2026 18:21:30 +0100
+Subject: [PATCH] [Backport to llvm_release_210] Fix backward translation of
+ `OpFmaKHR` (#3537)
+
+Backport of PR #3529 into `llvm_release_210`.
+
+All commits applied cleanly.
+
+Co-authored-by: Viktoria Maximova <viktoria.maksimova@intel.com>
+Upstream-Status: Backport
+---
+ lib/SPIRV/SPIRVReader.cpp              |  7 ++++++-
+ test/extensions/KHR/SPV_KHR_fma/fma.ll | 20 ++++++++++++++++----
+ 2 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/lib/SPIRV/SPIRVReader.cpp b/lib/SPIRV/SPIRVReader.cpp
+index dda5fe14..5eb572ac 100644
+--- a/lib/SPIRV/SPIRVReader.cpp
++++ b/lib/SPIRV/SPIRVReader.cpp
+@@ -3063,8 +3063,13 @@ Value *SPIRVToLLVM::transValueWithoutDecoration(SPIRVValue *BV, Function *F,
+         BV, Builder.CreateIntrinsic(Intrinsic::arithmetic_fence, RetTy, Val));
+   }
+   case OpFmaKHR: {
++    IRBuilder<> Builder(BB);
+     auto *BC = static_cast<SPIRVFmaKHR *>(BV);
+-    return mapValue(BV, transBuiltinFromInst("fma", BC, BB));
++    return mapValue(
++        BV, Builder.CreateIntrinsic(Intrinsic::fma, transType(BC->getType()),
++                                    {transValue(BC->getOperand(0), F, BB),
++                                     transValue(BC->getOperand(1), F, BB),
++                                     transValue(BC->getOperand(2), F, BB)}));
+   }
+   case internal::OpMaskedGatherINTEL: {
+     IRBuilder<> Builder(BB);
+diff --git a/test/extensions/KHR/SPV_KHR_fma/fma.ll b/test/extensions/KHR/SPV_KHR_fma/fma.ll
+index 612d866a..705986d4 100644
+--- a/test/extensions/KHR/SPV_KHR_fma/fma.ll
++++ b/test/extensions/KHR/SPV_KHR_fma/fma.ll
+@@ -6,13 +6,17 @@
+ ; RUN: FileCheck < %t.spt %s --check-prefix=CHECK-SPIRV
+ ; RUN: llvm-spirv -r %t.spv -o - | llvm-dis -o %t.rev.ll
+ ; RUN: FileCheck < %t.rev.ll %s --check-prefix=CHECK-LLVM
++; RUN: llvm-spirv -r %t.spv --spirv-target-env=SPV-IR -o - | llvm-dis -o %t.rev.ll
++; RUN: FileCheck < %t.rev.ll %s --check-prefix=CHECK-LLVM
+ 
+ ; RUN: llvm-spirv %t.bc -spirv-text -o %t.spt
+ ; RUN: FileCheck < %t.spt %s --check-prefix=CHECK-SPIRV-NO-EXT
+ ; RUN: llvm-spirv %t.bc -o %t.spv
+ ; RUN: spirv-val %t.spv
+ ; RUN: llvm-spirv -r %t.spv -o - | llvm-dis -o %t.rev.ll
+-; RUN: FileCheck < %t.rev.ll %s --check-prefix=CHECK-LLVM
++; RUN: FileCheck < %t.rev.ll %s --check-prefix=LLVM-NO-EXT
++; RUN: llvm-spirv -r %t.spv --spirv-target-env=SPV-IR -o - | llvm-dis -o %t.rev.ll
++; RUN: FileCheck < %t.rev.ll %s --check-prefix=LLVM-NO-EXT-SPV-IR
+ 
+ ; CHECK-SPIRV: Capability FMAKHR
+ ; CHECK-SPIRV: Extension "SPV_KHR_fma"
+@@ -29,9 +33,17 @@
+ ; CHECK-SPIRV-NO-EXT: ExtInst [[#TYPE_FLOAT]] [[#]] [[#]] fma
+ ; CHECK-SPIRV-NO-EXT: ExtInst [[#TYPE_VEC]] [[#]] [[#]] fma
+ 
+-; CHECK-LLVM: %{{.*}} = call spir_func float @_Z3fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
+-; CHECK-LLVM: %{{.*}} = call spir_func <4 x float> @_Z3fmaDv4_fS_S_(<4 x float> %{{.*}}, <4 x float> %{{.*}}, <4 x float> %{{.*}})
+-; CHECK-LLVM: %{{.*}} = call spir_func float @_Z3fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
++; CHECK-LLVM: %{{.*}} = call float @llvm.fma.f32(float %{{.*}}, float %{{.*}}, float %{{.*}})
++; CHECK-LLVM: %{{.*}} = call <4 x float> @llvm.fma.v4f32(<4 x float> %{{.*}}, <4 x float> %{{.*}}, <4 x float> %{{.*}})
++; CHECK-LLVM: %{{.*}} = call float @llvm.fma.f32(float %{{.*}}, float %{{.*}}, float %{{.*}})
++
++; LLVM-NO-EXT: %{{.*}} = call spir_func float @_Z3fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
++; LLVM-NO-EXT: %{{.*}} = call spir_func <4 x float> @_Z3fmaDv4_fS_S_(<4 x float> %{{.*}}, <4 x float> %{{.*}}, <4 x float> %{{.*}})
++; LLVM-NO-EXT: %{{.*}} = call spir_func float @_Z3fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
++
++; LLVM-NO-EXT-SPV-IR: %{{.*}} = call spir_func float @_Z15__spirv_ocl_fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
++; LLVM-NO-EXT-SPV-IR: %{{.*}} = call spir_func <4 x float> @_Z15__spirv_ocl_fmaDv4_fS_S_(<4 x float> %{{.*}}, <4 x float> %{{.*}}, <4 x float> %{{.*}})
++; LLVM-NO-EXT-SPV-IR: %{{.*}} = call spir_func float @_Z15__spirv_ocl_fmafff(float %{{.*}}, float %{{.*}}, float %{{.*}})
+ 
+ target datalayout = "e-i64:64-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024"
+ target triple = "spir64-unknown-unknown"
+-- 
+2.53.0
+
