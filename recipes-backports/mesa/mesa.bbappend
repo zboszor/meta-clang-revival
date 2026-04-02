@@ -1,4 +1,4 @@
-PV = "26.0.3"
-SRC_URI[sha256sum] = "ddb7443d328e89aa45b4b6b80f077bf937f099daeca8ba48cabe32aab769e134"
+PV = "26.0.4"
+SRC_URI[sha256sum] = "6d91541e086f29bb003602d2c81070f2be4c0693a90b181ca91e46fa3953fe78"
 SRC_URI:remove = "file://0001-freedreno-don-t-encode-build-path-into-binaries.patch"
 PACKAGECONFIG[vdpau] = ""
