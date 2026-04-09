@@ -63,6 +63,7 @@ SRC_URI = "\
     file://no-c-index-test.patch \
     file://0001-llvm-Allow-users-to-set-LLVM_HAVE_OPT_VIEWER_MODULES.patch \
     file://0001-compiler-rt-AArch64-Add-GCS-property-in-assembly-fil.patch \
+    file://0001-Set-libcxxabi-soversion-externally.patch \
 "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""

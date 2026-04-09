@@ -15,6 +15,6 @@ BUILD_OBJDUMP = "${BUILD_PREFIX}llvm-objdump"
 BUILD_NM = "${BUILD_PREFIX}llvm-nm"
 BUILD_READELF = "${BUILD_PREFIX}llvm-readelf"
 
-DEPENDS += "clang${CLANGMAJORVERSION}-native libcxx${CLANGMAJORVERSION}-initial-native compiler-rt${CLANGMAJORVERSION}-native"
+DEPENDS += "clang${CLANGMAJORVERSION}-native libcxx${CLANGMAJORVERSION}-native compiler-rt${CLANGMAJORVERSION}-native"
 
 LDFLAGS += " --rtlib=libgcc --unwindlib=libgcc"

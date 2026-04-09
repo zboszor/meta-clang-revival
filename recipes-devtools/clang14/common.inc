@@ -55,6 +55,7 @@ SRC_URI = "\
     file://0001-openmp-libomptarget-include-Debug.h-Add-missing-incl.patch \
     file://0001-compiler-rt-lib-orc-error.h-Add-missing-include.patch \
     file://0001-libunwind-Work-with-Python-3.12.patch \
+    file://0001-Set-libcxxabi-soversion-externally.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""

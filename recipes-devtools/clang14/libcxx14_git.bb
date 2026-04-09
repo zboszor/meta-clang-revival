@@ -12,7 +12,7 @@ inherit cmake python3native
 
 PACKAGECONFIG ??= "compiler-rt exceptions ${@bb.utils.contains("TC_CXX_RUNTIME", "llvm", "unwind unwind-shared", "", d)}"
 PACKAGECONFIG:append:armv5 = " no-atomics"
-PACKAGECONFIG:remove:class-native = "compiler-rt${CLANGMAJORVERSION}"
+PACKAGECONFIG:remove:class-native = "compiler-rt"
 PACKAGECONFIG[unwind] = "-DLIBCXXABI_USE_LLVM_UNWINDER=ON -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON,-DLIBCXXABI_USE_LLVM_UNWINDER=OFF,,"
 PACKAGECONFIG[exceptions] = "-DLIBCXXABI_ENABLE_EXCEPTIONS=ON -DLIBCXX_ENABLE_EXCEPTIONS=ON,-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF -DLIBCXX_ENABLE_EXCEPTIONS=OFF -DCMAKE_REQUIRED_FLAGS='-fno-exceptions',"
 PACKAGECONFIG[no-atomics] = "-D_LIBCXXABI_HAS_ATOMIC_BUILTINS=OFF -DCMAKE_SHARED_LINKER_FLAGS='-latomic',,"
@@ -23,6 +23,7 @@ DEPENDS += "ninja-native"
 DEPENDS:append:class-target = " clang14-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc virtual/${MLPREFIX}compilerlibs"
 DEPENDS:append:class-nativesdk = " clang14-crosssdk-${SDK_ARCH} nativesdk-compiler-rt14"
 DEPENDS:append:class-native = " clang14-native"
+DEPENDS:remove:class-native = "compiler-rt14-native"
 
 LIBCPLUSPLUS = ""
 COMPILER_RT ?= "-rtlib=compiler-rt"
@@ -72,6 +73,9 @@ EXTRA_OECMAKE += "\
                   -DLLVM_LIBDIR_SUFFIX=${LLVM_LIBDIR_SUFFIX} \
                   -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
                   -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+                  -DLIBCXX_ABI_VERSION=${MAJOR_VER} \
+                  -DLIBCXXABI_LIBRARY_VERSION='${MAJOR_VER}.${MINOR_VER}' \
+                  -DLIBCXXABI_MAJOR_VERSION=${MAJOR_VER} \
 "
 
 EXTRA_OECMAKE:append:class-target = " \

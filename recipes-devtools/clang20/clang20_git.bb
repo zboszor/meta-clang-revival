@@ -140,10 +140,9 @@ EXTRA_OECMAKE:append:class-target = "\
 
 DEPENDS = "binutils zlib zstd libffi libxml2 libxml2-native llvm20-tblgen-native"
 DEPENDS:append:class-nativesdk = " clang20-crosssdk-${SDK_SYS} virtual/nativesdk-cross-binutils"
-DEPENDS:append:class-target = " ${MLPREFIX}clang20-cross-${TARGET_ARCH} ${@bb.utils.contains('TC_CXX_RUNTIME', 'llvm', 'compiler-rt20 libcxx', '', d)}"
+DEPENDS:append:class-target = " ${MLPREFIX}clang20-cross-${TARGET_ARCH} ${@bb.utils.contains('TC_CXX_RUNTIME', 'llvm', 'compiler-rt20 libcxx20', '', d)}"
 
 RDEPENDS:${PN}:append:class-target = "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-lld', ' lld', '', d)}"
-RRECOMMENDS:${PN}:append:class-target = "binutils ${@bb.utils.contains('TC_CXX_RUNTIME', 'llvm', ' libcxx-dev', '', d)}"
 
 # patch out build host paths for reproducibility
 reproducible_build_variables() {
