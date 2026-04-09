@@ -28,7 +28,7 @@ PREFERRED_PROVIDER_virtual/nativesdk-cross-c++:class-crosssdk = "clang${CLANGMAJ
 PREFERRED_PROVIDER_virtual/nativesdk-cross-cc:class-cross-canadian = "clang${CLANGMAJORVERSION}-crosssdk-${SDK_SYS}"
 PREFERRED_PROVIDER_virtual/nativesdk-cross-c++:class-cross-canadian = "clang${CLANGMAJORVERSION}-crosssdk-${SDK_SYS}"
 
-BASE_DEFAULT_DEPS:append = " compiler-rt${CLANGMAJORVERSION} libcxx${CLANGMAJORVERSION}-initial"
+BASE_DEFAULT_DEPS:append = " compiler-rt${CLANGMAJORVERSION} libcxx${CLANGMAJORVERSION}"
 
 TUNE_CCARGS += "${@bb.utils.contains("DISTRO_FEATURES", "usrmerge", " --dyld-prefix=/usr", "", d)}"
 

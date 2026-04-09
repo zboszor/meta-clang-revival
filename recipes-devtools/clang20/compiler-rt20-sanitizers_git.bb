@@ -38,7 +38,7 @@ TOOLCHAIN = "clang20"
 TOOLCHAIN_NATIVE = "clang20"
 
 DEPENDS += "virtual/crypt compiler-rt20"
-DEPENDS:append:class-native = " clang20-native libxcrypt-native libcxx20-initial-native"
+DEPENDS:append:class-native = " clang20-native libxcrypt-native libcxx20-native"
 DEPENDS:append:class-nativesdk = " virtual/cross-c++ clang20-native clang20-crosssdk-${SDK_SYS} nativesdk-libxcrypt nativesdk-gcc-runtime"
 DEPENDS:append:class-target = " virtual/cross-c++ ${MLPREFIX}clang20-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc gcc-runtime"
 

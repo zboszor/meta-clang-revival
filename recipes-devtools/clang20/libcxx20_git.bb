@@ -22,8 +22,8 @@ PACKAGECONFIG[unwind-cross] = "-DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON,-DLIBUNWIND
 
 DEPENDS:append:class-target = " virtual/cross-c++ ${MLPREFIX}clang20-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc virtual/${MLPREFIX}compilerlibs"
 DEPENDS:append:class-nativesdk = " virtual/cross-c++ clang20-crosssdk-${SDK_SYS} nativesdk-compiler-rt20"
-DEPENDS:append:class-native = " clang20-native compiler-rt20-native"
-DEPENDS:remove:class-native = "libcxx20-initial-native"
+DEPENDS:append:class-native = " clang20-native"
+DEPENDS:remove:class-native = "compiler-rt20-native"
 
 COMPILER_RT ?= "${@bb.utils.contains("PACKAGECONFIG", "compiler-rt", "-rtlib=compiler-rt", "-rtlib=libgcc", d)}"
 UNWINDLIB ?= "${@bb.utils.contains("PACKAGECONFIG", "unwind", "-unwindlib=none", "-unwindlib=libgcc", d)}"
@@ -76,6 +76,9 @@ EXTRA_OECMAKE += "\
                   -DLLVM_LIBDIR_SUFFIX=${LLVM_LIBDIR_SUFFIX} \
                   -DLLVM_APPEND_VC_REV=OFF \
                   -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+                  -DLIBCXX_ABI_VERSION=${MAJOR_VER} \
+                  -DLIBCXXABI_LIBRARY_VERSION='${MAJOR_VER}.${MINOR_VER}' \
+                  -DLIBCXXABI_MAJOR_VERSION=${MAJOR_VER} \
 "
 
 EXTRA_OECMAKE:append:class-target = " \
