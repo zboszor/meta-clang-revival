@@ -12,9 +12,6 @@ inherit cmake pkgconfig python3native
 
 LIC_FILES_CHKSUM = "file://compiler-rt/LICENSE.TXT;md5=d846d1d65baf322d4c485d6ee54e877a"
 
-TOOLCHAIN = "clang17"
-TOOLCHAIN_NATIVE = "clang17"
-
 LIBCPLUSPLUS = ""
 COMPILER_RT = ""
 
@@ -22,30 +19,21 @@ TUNE_CCARGS:remove = "-no-integrated-as"
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-DEPENDS += "ninja-native libgcc"
-DEPENDS:append:class-target = " clang17-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc gcc-runtime"
-DEPENDS:append:class-nativesdk = " clang17-native clang17-crosssdk-${SDK_ARCH} nativesdk-gcc-runtime"
+DEPENDS += "libgcc"
+DEPENDS:append:class-target = " virtual/cross-c++ ${MLPREFIX}clang17-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc gcc-runtime"
+DEPENDS:append:class-nativesdk = " virtual/cross-c++ clang17-native clang17-crosssdk-${SDK_SYS} nativesdk-gcc-runtime"
 DEPENDS:append:class-native = " clang17-native"
 
 # Trick clang.bbclass into not creating circular dependencies
 UNWINDLIB:class-nativesdk = "--unwindlib=libgcc"
-COMPILER_RT:class-nativesdk:toolchain-clang17:runtime-llvm = "-rtlib=libgcc --unwindlib=libgcc"
-LIBCPLUSPLUS:class-nativesdk:toolchain-clang17:runtime-llvm = "-stdlib=libstdc++"
-
-CXXFLAGS += "-stdlib=libstdc++"
-LDFLAGS += "-unwindlib=libgcc -rtlib=libgcc -stdlib=libstdc++"
-BUILD_CXXFLAGS += "-stdlib=libstdc++"
-BUILD_LDFLAGS += "-unwindlib=libgcc -rtlib=libgcc -stdlib=libstdc++"
-BUILD_CPPFLAGS:remove = "-stdlib=libc++"
-BUILD_LDFLAGS:remove = "-stdlib=libc++ -lc++abi"
-
-BUILD_CC:toolchain-clang17  = "${CCACHE}clang"
-BUILD_CXX:toolchain-clang17 = "${CCACHE}clang++"
-BUILD_CPP:toolchain-clang17 = "${CCACHE}clang -E"
-BUILD_CCLD:toolchain-clang17 = "${CCACHE}clang"
-BUILD_RANLIB:toolchain-clang17 = "llvm-ranlib"
-BUILD_AR:toolchain-clang17 = "llvm-ar"
-BUILD_NM:toolchain-clang17 = "llvm-nm"
+COMPILER_RT:class-nativesdk = "-rtlib=libgcc"
+LIBCPLUSPLUS:class-nativesdk = "-stdlib=libstdc++"
+UNWINDLIB:class-native = "--unwindlib=libgcc"
+COMPILER_RT:class-native = "-rtlib=libgcc"
+LIBCPLUSPLUS:class-native = "-stdlib=libc++"
+UNWINDLIB:class-target = "--unwindlib=libgcc"
+COMPILER_RT:class-target = "-rtlib=libgcc"
+LIBCPLUSPLUS:class-target = "-stdlib=libstdc++"
 
 PACKAGECONFIG ??= ""
 PACKAGECONFIG[crt] = "-DCOMPILER_RT_BUILD_CRT:BOOL=ON,-DCOMPILER_RT_BUILD_CRT:BOOL=OFF"
@@ -53,11 +41,33 @@ PACKAGECONFIG[profile] = "-DCOMPILER_RT_BUILD_PROFILE=ON,-DCOMPILER_RT_BUILD_PRO
 
 HF = ""
 HF:class-target = "${@ bb.utils.contains('TUNE_CCARGS_MFLOAT', 'hard', 'hf', '', d)}"
+
+CC = "${CCACHE}${HOST_PREFIX}clang ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
+CXX = "${CCACHE}${HOST_PREFIX}clang++ ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
+LDFLAGS += "${COMPILER_RT} ${UNWINDLIB}"
+CXXFLAGS += "${LIBCPLUSPLUS}"
+
+TOOLCHAIN = "clang17"
+TOOLCHAIN_NATIVE = "clang17"
+
+def get_compiler_rt_arch(bb, d):
+    if bb.utils.contains('TUNE_FEATURES', 'armv5 thumb dsp', True, False, d):
+        return 'armv5te'
+    elif bb.utils.contains('TUNE_FEATURES', 'armv4 thumb', True, False, d):
+        return 'armv4t'
+    elif bb.utils.contains('TUNE_FEATURES', 'arm vfp callconvention-hard', True, False, d):
+        return 'armhf'
+    return d.getVar('HOST_ARCH')
+
 HF[vardepvalue] = "${HF}"
 
 OECMAKE_TARGET_COMPILE = "compiler-rt"
 OECMAKE_TARGET_INSTALL = "install-compiler-rt install-compiler-rt-headers"
 OECMAKE_SOURCEPATH = "${S}/llvm"
+
+INSTALL_VER ?= "${MAJOR_VER}.${MINOR_VER}.${PATCH_VER}"
+INSTALL_VER:class-native = "${@oe.utils.trim_version("${PV}", 1)}"
+
 EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=RelWithDebInfo \
                   -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=OFF \
                   -DCOMPILER_RT_STANDALONE_BUILD=OFF \
@@ -111,15 +121,6 @@ FILES:${PN}-dev += "${datadir} ${nonarch_libdir}/clang/${MAJOR_VER}.${MINOR_VER}
 INSANE_SKIP:${PN} = "dev-so libdir"
 INSANE_SKIP:${PN}-dbg = "libdir"
 
-#PROVIDES:append:class-target = "\
-#        virtual/${MLPREFIX}compilerlibs \
-#        libgcc \
-#        libgcc-initial \
-#        libgcc-dev \
-#        libgcc-initial-dev \
-#        "
-#
-
 RDEPENDS:${PN}-dev += "${PN}-staticdev"
 
 BBCLASSEXTEND = "native nativesdk"
@@ -127,5 +128,4 @@ BBCLASSEXTEND = "native nativesdk"
 ALLOW_EMPTY:${PN} = "1"
 ALLOW_EMPTY:${PN}-dev = "1"
 
-TOOLCHAIN:forcevariable = "clang17"
 SYSROOT_DIRS:append:class-target = " ${nonarch_libdir}"

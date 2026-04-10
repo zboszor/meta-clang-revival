@@ -173,10 +173,7 @@ EXTRA_OECMAKE:append:class-nativesdk = "\
                   -DCMAKE_NM=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-nm \
                   -DCMAKE_STRIP=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-strip \
                   -DLLVM_NATIVE_TOOL_DIR=${STAGING_BINDIR_NATIVE} \
-                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
-                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen${PV} \
-                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
-                  -DLLVM_HEADERS_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-min-tblgen${PV} \
+                  -DLLVM_HEADERS_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-min-tblgen \
                   -DPYTHON_LIBRARY=${STAGING_LIBDIR}/lib${PYTHON_DIR}${PYTHON_ABI}.so \
                   -DLLDB_PYTHON_RELATIVE_PATH=${PYTHON_SITEPACKAGES_DIR} \
                   -DLLDB_PYTHON_EXE_RELATIVE_PATH=${PYTHON} \
@@ -186,10 +183,7 @@ EXTRA_OECMAKE:append:class-nativesdk = "\
 "
 EXTRA_OECMAKE:append:class-target = "\
                   -DLLVM_NATIVE_TOOL_DIR=${STAGING_BINDIR_NATIVE} \
-                  -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
-                  -DLLDB_TABLEGEN=${STAGING_BINDIR_NATIVE}/lldb-tblgen${PV} \
-                  -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
-                  -DLLVM_HEADERS_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-min-tblgen${PV} \
+                  -DLLVM_HEADERS_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-min-tblgen \
                   -DCMAKE_RANLIB=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-ranlib \
                   -DCMAKE_AR=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-ar \
                   -DCMAKE_NM=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}llvm-nm \
@@ -207,10 +201,9 @@ EXTRA_OECMAKE:append:class-target = "\
 
 DEPENDS = "binutils zlib zstd libffi libxml2 libxml2-native ninja-native swig-native"
 DEPENDS:append:class-nativesdk = " clang17-crosssdk-${SDK_ARCH} virtual/nativesdk-cross-binutils nativesdk-python3"
-DEPENDS:append:class-target = " clang17-cross-${TARGET_ARCH} gcc-cross-${TARGET_ARCH} python3 compiler-rt17 libcxx"
+DEPENDS:append:class-target = " clang17-cross-${TARGET_ARCH} gcc-cross-${TARGET_ARCH} python3 compiler-rt17 libcxx17"
 
 RRECOMMENDS:${PN} = "binutils"
-RRECOMMENDS:${PN}:append:class-target = " libcxx-dev"
 
 # patch out build host paths for reproducibility
 do_compile:prepend:class-target() {
@@ -256,16 +249,17 @@ do_install:append:class-native () {
     if ${@bb.utils.contains('PACKAGECONFIG', 'clangd', 'true', 'false', d)}; then
         install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clangd-indexer ${D}${bindir}/clangd-indexer
     fi
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-pseudo-gen ${D}${bindir}/clang-pseudo-gen
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen${PV}
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tidy-confusable-chars-gen ${D}${bindir}/clang-tidy-confusable-chars-gen
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/llvm-min-tblgen ${D}${bindir}/llvm-min-tblgen${PV}
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/llvm-min-tblgen ${D}${bindir}/llvm-min-tblgen
     for f in `find ${D}${bindir} -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
         echo "stripped $f"
     done
-    mv ${D}${bindir}/llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
+    ln -sf clang-tblgen ${D}${bindir}/clang-tblgen${PV}
+    ln -sf llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
     ln -sf llvm-config ${D}${bindir}/llvm-config${PV}
 }
 
@@ -274,14 +268,14 @@ do_install:append:class-nativesdk () {
     if ${@bb.utils.contains('PACKAGECONFIG', 'clangd', 'true', 'false', d)}; then
         install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clangd-indexer ${D}${bindir}/clangd-indexer
     fi
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen${PV}
-    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/lldb-tblgen ${D}${bindir}/lldb-tblgen${PV}
+    install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tblgen ${D}${bindir}/clang-tblgen
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-pseudo-gen ${D}${bindir}/clang-pseudo-gen
     install -Dm 0755 ${B}${BINPATHPREFIX}/bin/clang-tidy-confusable-chars-gen ${D}${bindir}/clang-tidy-confusable-chars-gen
     for f in `find ${D}${bindir} -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
     done
-    mv ${D}${bindir}/llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
+    ln -sf clang-tblgen ${D}${bindir}/clang-tblgen${PV}
+    ln -sf llvm-tblgen ${D}${bindir}/llvm-tblgen${PV}
     ln -sf llvm-config ${D}${bindir}/llvm-config${PV}
     rm -rf ${D}${datadir}/llvm/cmake
     rm -rf ${D}${datadir}/llvm
@@ -437,7 +431,7 @@ SYSROOT_PREPROCESS_FUNCS:append:class-target = " clang_sysroot_preprocess"
 
 clang_sysroot_preprocess() {
 	install -d ${SYSROOT_DESTDIR}${bindir_crossscripts}/
-	install -m 0755 ${S}/../sources-unpack/llvm-config ${SYSROOT_DESTDIR}${bindir_crossscripts}/
+	install -m 0755 ${S}/llvm/tools/llvm-config/llvm-config ${SYSROOT_DESTDIR}${bindir_crossscripts}/
 	ln -sf llvm-config ${SYSROOT_DESTDIR}${bindir_crossscripts}/llvm-config${PV}
 	# LLDTargets.cmake references the lld executable(!) that some modules/plugins link to
 	install -d ${SYSROOT_DESTDIR}${bindir}
