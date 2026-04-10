@@ -54,8 +54,8 @@ EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 "
 
 EXTRA_OECMAKE:append:class-nativesdk = "\
-               -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen \
-               -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen \
+               -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
+               -DCLANG_TABLEGEN=${STAGING_BINDIR_NATIVE}/clang-tblgen${PV} \
 "
 
 EXTRA_OECMAKE:append:class-target = "\
