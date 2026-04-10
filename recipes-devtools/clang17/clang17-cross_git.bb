@@ -8,7 +8,7 @@ SECTION = "devel"
 
 PN = "clang17-cross-${TARGET_ARCH}"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 inherit cross
 DEPENDS += "clang17-native virtual/cross-binutils"

@@ -5,7 +5,7 @@ DESCRIPTION = "LLVM based C/C++ compiler Runtime"
 HOMEPAGE = "http://compiler-rt.llvm.org/"
 SECTION = "base"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 inherit cmake pkgconfig python3native

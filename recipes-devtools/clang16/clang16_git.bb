@@ -5,7 +5,7 @@ DESCRIPTION = "LLVM based C/C++ compiler"
 HOMEPAGE = "http://clang.llvm.org/"
 SECTION = "devel"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 INHIBIT_DEFAULT_DEPS = "1"

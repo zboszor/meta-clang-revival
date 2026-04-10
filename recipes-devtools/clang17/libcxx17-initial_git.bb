@@ -5,7 +5,7 @@ DESCRIPTION = "libc++ is a new implementation of the C++ standard library, targe
 HOMEPAGE = "http://libcxx.llvm.org/"
 SECTION = "base"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 
 inherit cmake python3native
