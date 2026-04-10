@@ -23,6 +23,7 @@ DEPENDS += "ninja-native"
 DEPENDS:append:class-target = " clang17-cross-${TARGET_ARCH} virtual/${MLPREFIX}libc virtual/${MLPREFIX}compilerlibs"
 DEPENDS:append:class-nativesdk = " clang17-crosssdk-${SDK_ARCH} nativesdk-compiler-rt17"
 DEPENDS:append:class-native = " clang17-native"
+DEPENDS:remove:class-native = "compiler-rt17-native"
 
 LIBCPLUSPLUS = ""
 COMPILER_RT ?= "-rtlib=compiler-rt"
@@ -72,6 +73,9 @@ EXTRA_OECMAKE += "\
                   -DLLVM_RUNTIME_TARGETS=${HOST_SYS} \
                   -DLLVM_LIBDIR_SUFFIX=${LLVM_LIBDIR_SUFFIX} \
                   -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+                  -DLIBCXX_ABI_VERSION=${MAJOR_VER} \
+                  -DLIBCXXABI_LIBRARY_VERSION='${MAJOR_VER}.${MINOR_VER}' \
+                  -DLIBCXXABI_MAJOR_VERSION=${MAJOR_VER} \
 "
 
 EXTRA_OECMAKE:append:class-target = " \
@@ -105,7 +109,7 @@ do_install:append() {
             install -Dm 0644 ${S}/libunwind/include/$f ${D}${includedir}/$f
         done
         install -d ${D}${libdir}/pkgconfig
-        sed -e 's,@LIBDIR@,${libdir},g;s,@VERSION@,${PV},g' ${S}/../libunwind.pc.in > ${D}${libdir}/pkgconfig/libunwind.pc
+        sed -e 's,@LIBDIR@,${libdir},g;s,@VERSION@,${PV},g' ${S}/libunwind/libunwind.pc.in > ${D}${libdir}/pkgconfig/libunwind.pc
     fi
 }
 

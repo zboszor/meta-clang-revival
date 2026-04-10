@@ -8,8 +8,6 @@ LICENSE = "Apache-2.0-with-LLVM-exception"
 BASEURI ??= "${LLVM_GIT}/llvm-project;protocol=${LLVM_GIT_PROTOCOL};branch=${BRANCH}"
 SRC_URI = "\
     ${BASEURI} \
-    file://llvm-config \
-    file://libunwind.pc.in \
     file://0001-libcxxabi-Find-libunwind-headers-when-LIBCXXABI_LIBU.patch \
     file://0002-compiler-rt-support-a-new-embedded-linux-target.patch \
     file://0003-compiler-rt-Simplify-cross-compilation.-Don-t-use-na.patch \
@@ -48,6 +46,10 @@ SRC_URI = "\
     file://0001-ADT-Add-cstdint-to-SmallVector-101761.patch \
     file://0001-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch \
     file://0001-Add-missing-include-to-X86MCTargetDesc.h-123320.patch \
+    file://0001-compiler-rt-lib-orc-error.h-Add-missing-include.patch \
+    file://0001-Set-libcxxabi-soversion-externally.patch \
+    file://0029-llvm-Add-libunwind.pc.in-and-llvm-config-scripts.patch \
+    file://0034-llvm-config-remove-LLVM_LDFLAGS-from-ldflags-output.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
