@@ -45,6 +45,9 @@ SRC_URI = "\
     file://0034-ToolChains-Gnu.cpp-ARMLibDirs-search-also-in-lib32.patch \
     file://0035-libcxx-Implement-LWG3545-std-pointer_traits-should-be-.patch \
     file://0001-Fix-building-lldb-with-Python-3.13.patch \
+    file://0001-ADT-Add-cstdint-to-SmallVector-101761.patch \
+    file://0001-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch \
+    file://0001-Add-missing-include-to-X86MCTargetDesc.h-123320.patch \
     "
 # Fallback to no-PIE if not set
 GCCPIE ??= ""
