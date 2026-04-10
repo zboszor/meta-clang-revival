@@ -8,7 +8,7 @@ SECTION = "devel"
 
 PN = "clang17-cross-canadian-${TRANSLATED_TARGET_ARCH}"
 
-require clang.inc
+require common-clang.inc
 require common-source.inc
 inherit cross-canadian
 
