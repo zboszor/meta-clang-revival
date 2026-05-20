@@ -1,5 +1,5 @@
-PV = "26.1.0"
-SRC_URI[sha256sum] = "a5095e6dc2986c78f0cef4c5555dc803e93b6bfe5670e991f9e8bd49395bae19"
+PV = "26.1.1"
+SRC_URI[sha256sum] = "8bd36c031cc6d0edfec04617527609454ee3a09ad53bdf983b45fc2c1e129b2e"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/mesa:"
 
