@@ -1,3 +1,5 @@
+Upstream-Status: Backport [https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/41991]
+
 diff --git a/src/amd/vulkan/nir/radv_nir_rt_stage_monolithic.c b/src/amd/vulkan/nir/radv_nir_rt_stage_monolithic.c
 index 98ff3df2793b04418a0d28983dde0d25a1a0088b..0a472cd1adfa545d1b7ded57421ccd2afc3f75bb 100644
 --- a/src/amd/vulkan/nir/radv_nir_rt_stage_monolithic.c
