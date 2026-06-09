@@ -13,8 +13,8 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index b5b5ce0b66..63fedad2dd 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -851,7 +851,7 @@ if(NOT MSVC)
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-noexcept-type") # Added for gtest
+@@ -861,7 +861,7 @@ if(NOT MSVC)
+       endif()
      endif()
    endif()
 -  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Werror=vla")
