@@ -74,6 +74,7 @@ INSTALL_VER:class-native = "${@oe.utils.trim_version("${PV}", 1)}"
 EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=RelWithDebInfo \
                   -DCOMPILER_RT_STANDALONE_BUILD=ON \
                   -DCOMPILER_RT_INCLUDE_TESTS=OFF \
+                  -DCOMPILER_RT_BUILD_ORC=OFF \
                   -DCOMPILER_RT_BUILD_XRAY=OFF \
                   -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
                   -DCOMPILER_RT_BUILD_MEMPROF=OFF \
