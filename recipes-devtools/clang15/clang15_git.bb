@@ -179,6 +179,8 @@ EXTRA_OECMAKE:append:class-nativesdk = "\
 "
 EXTRA_OECMAKE:append:class-target = "\
                   -DCMAKE_CROSSCOMPILING:BOOL=ON \
+                  -DCMAKE_C_COMPILER=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}gcc \
+                  -DCMAKE_CXX_COMPILER=${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}g++ \
                   -DLLVM_USE_HOST_TOOLS=OFF \
                   -DLLVM_CONFIG_PATH=${STAGING_BINDIR_NATIVE}/llvm-config \
                   -DLLVM_TABLEGEN=${STAGING_BINDIR_NATIVE}/llvm-tblgen${PV} \
@@ -204,6 +206,12 @@ EXTRA_OECMAKE:append:class-target = "\
 DEPENDS = "binutils zlib zstd libffi libxml2 libxml2-native ninja-native swig-native"
 DEPENDS:append:class-nativesdk = " clang15-crosssdk-${SDK_ARCH} virtual/nativesdk-cross-binutils nativesdk-python3"
 DEPENDS:append:class-target = " clang15-cross-${TARGET_ARCH} gcc-cross-${TARGET_ARCH} python3 compiler-rt15 libcxx15"
+
+# Clang 15 trips over libstdc++ assertion-mode iterator checks from newer GCC toolchains.
+# Undefine the assertion macro for this recipe to keep LLVM 15 buildable with GCC 16 sysroots.
+CXXFLAGS:append:class-target = " -U_GLIBCXX_ASSERTIONS"
+CC:class-target = "${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}gcc ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
+CXX:class-target = "${STAGING_BINDIR_TOOLCHAIN}/${TARGET_PREFIX}g++ ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
 
 RRECOMMENDS:${PN} = "binutils"
 
@@ -405,6 +413,7 @@ INSANE_SKIP:${MLPREFIX}liblldb = "dev-so"
 SSTATE_SCAN_FILES:remove = "*-config"
 
 TOOLCHAIN = "clang15"
+TOOLCHAIN:class-target = "gcc"
 TOOLCHAIN:class-native = "gcc"
 TOOLCHAIN:class-nativesdk = "clang15"
 COMPILER_RT:class-nativesdk:toolchain-clang:runtime-llvm = "-rtlib=libgcc --unwindlib=libgcc"
