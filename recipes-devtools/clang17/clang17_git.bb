@@ -419,7 +419,13 @@ INSANE_SKIP:${MLPREFIX}liblldb = "dev-so"
 #Avoid SSTATE_SCAN_COMMAND running sed over llvm-config.
 SSTATE_SCAN_FILES:remove = "*-config"
 
-TOOLCHAIN = "clang17"
+# Build the target clang17 with the host GCC cross-toolchain instead of
+# self-hosting with clang17. The fresh poky libstdc++ (16.1.0) exposes a
+# clang <19 frontend bug parsing libstdc++'s __normal_iterator hidden-friend
+# operator- trailing-return-type, which breaks a clang17 self-host build.
+# (Fixed upstream in clang 19.1.0; GCC compiles its own libstdc++ headers
+# fine, so use it for the bootstrap.)
+TOOLCHAIN = "gcc"
 TOOLCHAIN:class-native = "gcc"
 TOOLCHAIN:class-nativesdk = "clang17"
 COMPILER_RT:class-nativesdk:toolchain-clang:runtime-llvm = "-rtlib=libgcc --unwindlib=libgcc"
