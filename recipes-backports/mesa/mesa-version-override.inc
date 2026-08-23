@@ -1,5 +1,5 @@
-PV = "26.2.0"
-SRC_URI[sha256sum] = "efd4bb08cdb7c365a812cd4e6c9202ab55b2f22cdcd13c7d6c4f9647b799a4ef"
+PV = "26.2.1"
+SRC_URI[sha256sum] = "c47e81bddc4760360a41ac3c5acec38acb81f9d750ecef47e7f3adc7021a4442"
 
 SRC_URI:remove = "file://0001-gallivm-Fix-armhf-build-against-LLVM-22.patch"
 
