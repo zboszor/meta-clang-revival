@@ -1,13 +1,9 @@
-PV = "26.1.8"
-SRC_URI[sha256sum] = "b320f65874fd9653ac6c0bd1616605387344e1247411a50c797b5f3fb9dc0b55"
+PV = "26.2.4"
+SRC_URI[sha256sum] = "bce5f7fbebb934373b86c999a064d52fb5065878dc57f287f95346648ec832e9"
 
 SRC_URI:remove = "file://0001-freedreno-don-t-encode-build-path-into-binaries.patch"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/mesa:"
-
-SRC_URI += " \
-	file://0001-intel-compiler-jay-avoid-C23-fixed-underlying-enum-t.patch \
-"
 
 PACKAGECONFIG[vdpau] = ""
 
