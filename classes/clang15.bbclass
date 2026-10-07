@@ -112,7 +112,7 @@ YOCTO_ALTERNATE_LIBDIR:toolchain-clang15:class-target = "/${BASELIB}"
 #DEPENDS:append:toolchain-clang15:class-target = " clang15-cross-${TARGET_ARCH} "
 #DEPENDS:remove:toolchain-clang15:allarch = "clang15-cross-${TARGET_ARCH}"
 
-def clang_base_deps(d):
+def clang15_base_deps(d):
     if not d.getVar('INHIBIT_DEFAULT_DEPS', False):
         if not oe.utils.inherits(d, 'allarch') :
             ret = " ${MLPREFIX}clang15-cross-${TARGET_ARCH} virtual/libc "
@@ -136,7 +136,7 @@ def clang_base_deps(d):
             return ret
     return ""
 
-BASE_DEFAULT_DEPS:append:class-target:toolchain-clang15:class-target = " ${@clang_base_deps(d)}"
+BASE_DEFAULT_DEPS:append:class-target:toolchain-clang15:class-target = " ${@clang15_base_deps(d)}"
 BASE_DEFAULT_DEPS:append:class-native:toolchain-clang15:runtime-llvm = " libcxx-native compiler-rt15-native"
 BASE_DEFAULT_DEPS:append:class-nativesdk:toolchain-clang15:runtime-llvm = " clang15-native nativesdk-libcxx nativesdk-compiler-rt15"
 

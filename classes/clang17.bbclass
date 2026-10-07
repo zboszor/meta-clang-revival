@@ -111,7 +111,7 @@ YOCTO_ALTERNATE_LIBDIR:toolchain-clang17:class-target = "/${BASELIB}"
 #DEPENDS:append:toolchain-clang17:class-target = " clang-cross-${TARGET_ARCH} "
 #DEPENDS:remove:toolchain-clang17:allarch = "clang-cross-${TARGET_ARCH}"
 
-def clang_base_deps(d):
+def clang17_base_deps(d):
     if not d.getVar('INHIBIT_DEFAULT_DEPS', False):
         if not oe.utils.inherits(d, 'allarch') :
             ret = " ${MLPREFIX}clang17-cross-${TARGET_ARCH} virtual/libc "
@@ -135,7 +135,7 @@ def clang_base_deps(d):
             return ret
     return ""
 
-BASE_DEFAULT_DEPS:append:class-target:toolchain-clang17:class-target = " ${@clang_base_deps(d)}"
+BASE_DEFAULT_DEPS:append:class-target:toolchain-clang17:class-target = " ${@clang17_base_deps(d)}"
 BASE_DEFAULT_DEPS:append:class-native:toolchain-clang17:runtime-llvm = " libcxx-native compiler-rt17-native"
 BASE_DEFAULT_DEPS:append:class-nativesdk:toolchain-clang17:runtime-llvm = " clang17-native nativesdk-libcxx nativesdk-compiler-rt17"
 
